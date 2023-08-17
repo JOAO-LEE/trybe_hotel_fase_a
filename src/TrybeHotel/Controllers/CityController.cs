@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using TrybeHotel.Models;
 using TrybeHotel.Repository;
 
+// começando o projeto!! #vqv
+
 namespace TrybeHotel.Controllers
 {
     [ApiController]
@@ -13,16 +15,18 @@ namespace TrybeHotel.Controllers
         {
             _repository = repository;
         }
-        
+
         // 2. Desenvolva o endpoint GET /city
         [HttpGet]
-        public IActionResult GetCities(){
+        public IActionResult GetCities()
+        {
             throw new NotImplementedException();
         }
 
         // 3. Desenvolva o endpoint POST /city
         [HttpPost]
-        public IActionResult PostCity([FromBody] City city){
+        public IActionResult PostCity([FromBody] City city)
+        {
             throw new NotImplementedException();
         }
     }
