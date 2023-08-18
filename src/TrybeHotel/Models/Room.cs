@@ -10,5 +10,5 @@ public class Room
   public int Capacity { get; set; }
   public string Image { get; set; }
   public int HotelId { get; set; }
-  public ICollection<Hotel> Hotel { get; set; }
+  public ICollection<Hotel> Hotels { get; set; }
 }
