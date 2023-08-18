@@ -20,7 +20,8 @@ namespace TrybeHotel.Controllers
         [HttpGet]
         public IActionResult GetCities()
         {
-            throw new NotImplementedException();
+            var allCities = _repository.GetCities();
+            return Ok(allCities);
         }
 
         // 3. Desenvolva o endpoint POST /city
