@@ -15,7 +15,7 @@ namespace TrybeHotel.Repository
         public IEnumerable<CityDto> GetCities()
         {
             return (from cities in _context.Cities
-                    select new CityDto { name = cities.Name, cityId = cities.CityId }).ToList();
+                    select new CityDto { Name = cities.Name, CityId = cities.CityId }).ToList();
         }
 
         // 3. Desenvolva o endpoint POST /city

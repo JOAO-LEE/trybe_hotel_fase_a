@@ -15,5 +15,5 @@ public class TrybeHotelContext : DbContext, ITrybeHotelContext
 
         optionsBuilder.UseSqlServer(connectionString);
     }
-    // public TrybeHotelContext() { }
+    public TrybeHotelContext() { }
 }
