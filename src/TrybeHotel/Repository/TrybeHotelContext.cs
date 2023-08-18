@@ -11,7 +11,7 @@ public class TrybeHotelContext : DbContext, ITrybeHotelContext
     public DbSet<Room> Rooms { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = "Server=localhost;Database=TrybeHotel;User=SA;Password=TrybeHotel12!;TrustServerCertificate=True";
+        string connectionString = "Server=localhost;Database=TrybeHotel;User=SA;Password=TrybeHotel12!;TrustServerCertificate=True";
 
         optionsBuilder.UseSqlServer(connectionString);
     }
