@@ -11,14 +11,12 @@ namespace TrybeHotel.Repository
             _context = context;
         }
 
-        // 2. Desenvolva o endpoint GET /city
         public IEnumerable<CityDto> GetCities()
         {
             return (from cities in _context.Cities
                     select new CityDto { Name = cities.Name, CityId = cities.CityId }).ToList();
         }
 
-        // 3. Desenvolva o endpoint POST /city
         public CityDto AddCity(City city)
         {
             _context.Cities.Add(city);
