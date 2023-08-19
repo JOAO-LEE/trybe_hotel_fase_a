@@ -20,9 +20,20 @@ namespace TrybeHotel.Repository
         }
 
         // 5. Desenvolva o endpoint POST /hotel
-        public HotelDto AddHotel(Hotel hotel)
+        public HotelDto AddHotel(Hotel hotelToCreate)
         {
-            throw new NotImplementedException();
+            _context.Hotels.Add(hotelToCreate);
+            _context.SaveChanges();
+            return (from hotel in _context.Hotels
+                    where hotelToCreate.Name == hotel.Name
+                    join city in _context.Cities on hotel.CityId equals city.CityId
+                    select new HotelDto { HotelId = hotel.HotelId, Name = hotel.Name, Address = hotel.Address, CityId = city.CityId, CityName = city.Name }).First();
         }
     }
 }
+
+// {
+// 	"Name":"Trybe Hotel RJ",
+// 	"Address":"Avenida Atlântica, 1400",
+// 	"CityId": 2
+// }
