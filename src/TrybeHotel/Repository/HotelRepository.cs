@@ -31,9 +31,3 @@ namespace TrybeHotel.Repository
         }
     }
 }
-
-// {
-// 	"Name":"Trybe Hotel RJ",
-// 	"Address":"Avenida Atlântica, 1400",
-// 	"CityId": 2
-// }
