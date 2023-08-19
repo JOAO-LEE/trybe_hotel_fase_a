@@ -11,15 +11,3 @@ namespace TrybeHotel.Dto
 
     }
 }
-
-// [
-//     {
-// 		  "hotelId": 1,
-// 		  "name": "Trybe Hotel SP",
-// 		  "address": "Avenida Paulista, 1400",
-// 		  "cityId": 1,
-// 		  "cityName": "São Paulo"
-// 	  },
-
-//   /*...*/
-// ]

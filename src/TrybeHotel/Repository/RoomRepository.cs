@@ -23,9 +23,15 @@ namespace TrybeHotel.Repository
         }
 
         // 7. Desenvolva o endpoint POST /room
-        public RoomDto AddRoom(Room room)
+        public RoomDto AddRoom(Room roomToCreate)
         {
-            throw new NotImplementedException();
+            _context.Rooms.Add(roomToCreate);
+            _context.SaveChanges();
+            return (from room in _context.Rooms
+                    where roomToCreate.Name == room.Name
+                    join hotel in _context.Hotels on room.HotelId equals hotel.HotelId
+                    join city in _context.Cities on hotel.CityId equals city.CityId
+                    select new RoomDto { RoomId = room.RoomId, Name = room.Name, Capacity = room.Capacity, Image = room.Image, Hotel = new HotelDto { HotelId = hotel.HotelId, Name = hotel.Name, Address = hotel.Address, CityId = city.CityId, CityName = city.Name } }).First();
         }
 
         // 8. Desenvolva o endpoint DELETE /room/:roomId

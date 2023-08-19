@@ -9,21 +9,3 @@ namespace TrybeHotel.Dto
           public HotelDto? Hotel { get; set; }
      }
 }
-
-// [
-//     {
-// 		  "roomId": 1,
-// 		  "name": "Suite básica",
-// 		  "capacity": 2,
-// 		  "image": "image suite",
-// 		  "hotel": {
-//   			"hotelId": 1,
-// 			  "name": "Trybe Hotel SP",
-// 			  "address": "Avenida Paulista, 1400",
-// 			  "cityId": 1,
-// 			  "cityName": "São Paulo"
-// 		  }
-// 	  },
-
-//   /*...*/
-// ]
