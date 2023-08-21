@@ -13,6 +13,7 @@ using System.IO;
 using TrybeHotel.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Azure;
 
 public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -95,7 +96,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
 
     public async Task TestGetAllHotels(string url)
     {
-        List<Hotel> allHotels = new() { new Hotel { HotelId = 1, Name = "Trybe Hotel Manaus", Address = "Address 1", CityId = 1 }, new Hotel { HotelId = 2, Name = "Trybe Hotel Palmas", Address = "Address 2", CityId = 2 }, new Hotel { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Address 3", CityId = 1 } };
+        List<HotelDto> allHotels = new() { new HotelDto { HotelId = 1, Name = "Trybe Hotel Manaus", Address = "Address 1", CityId = 1, CityName = "Manaus" }, new HotelDto { HotelId = 2, Name = "Trybe Hotel Palmas", Address = "Address 2", CityId = 2, CityName = "Palmas" }, new HotelDto { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Address 3", CityId = 1, CityName = "Manaus" } };
         var response = await _clientTest.GetAsync(url);
         response.StatusCode.Equals(200);
         response.Content.Equals(allHotels);
@@ -131,16 +132,12 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         response.Content.Equals(createdRoom);
     }
 
+    [Theory(DisplayName = "Testa se a rota GET de Room traz os quartos daquele hotel")]
+    [InlineData("/room/1")]
+    public async Task TestGetRooms(string url)
+    {
+        var response = await _clientTest.GetAsync(url);
+        response.StatusCode.Equals(200);
 
-    //     [Theory(DisplayName = "Testa se a rota GET de Room traz os quartos daquele hotel")]
-    //     [InlineData("/room/1")]
-    //     public async Task TestGetRooms(string url)
-    //     {
-    //         List<RoomDto> allHotelRooms = new() { new RoomDto { RoomId = 1, Name = "Room 1", Capacity = 2, Image = "Image 1", Hotel =  }
-    // }
-    // var response = _clientTest.GetAsync(url);
-
-
-
-    //     }
+    }
 }
