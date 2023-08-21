@@ -53,7 +53,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
                     appContext.SaveChanges();
                     appContext.Hotels.Add(new Hotel { HotelId = 1, Name = "Trybe Hotel Manaus", Address = "Address 1", CityId = 1 });
                     appContext.Hotels.Add(new Hotel { HotelId = 2, Name = "Trybe Hotel Palmas", Address = "Address 2", CityId = 2 });
-                    appContext.Hotels.Add(new Hotel { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Address 3", CityId = 1 });
+                    appContext.Hotels.Add(new Hotel { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Addres 3", CityId = 1 });
                     appContext.SaveChanges();
                     appContext.Rooms.Add(new Room { RoomId = 1, Name = "Room 1", Capacity = 2, Image = "Image 1", HotelId = 1 });
                     appContext.Rooms.Add(new Room { RoomId = 2, Name = "Room 2", Capacity = 3, Image = "Image 2", HotelId = 1 });
@@ -71,22 +71,20 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Trait("Rotas", "City")]
-    [Theory(DisplayName = "Testa se a rota GET de City traz todas as cidades:")]
+    [Theory(DisplayName = "1 - Testa se a rota GET de City traz todas as cidades:")]
     [InlineData("/city")]
     public async Task TestGetAllCities(string url)
     {
-        // List<City> allCities = new() { new City { CityId = 1, Name = "Manaus" }, new City { CityId = 2, Name = "Palmas" } };
         var response = await _clientTest.GetAsync(url);
         response.EnsureSuccessStatusCode();
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         response.Content.ReadAsStringAsync().Result.Should().BeEquivalentTo("[{\"cityId\":1,\"name\":\"Manaus\"},{\"cityId\":2,\"name\":\"Palmas\"}]");
     }
 
-    [Theory(DisplayName = "Testa se a rota POST de City cria uma cidade:")]
+    [Theory(DisplayName = "2 - Testa se a rota POST de City cria uma cidade:")]
     [InlineData("/city", "{\"name\":\"Rio de Janeiro\"}")]
     public async Task TestCreateCity(string url, string city)
     {
-        // CityDto createdRio = new() { Name = "Rio de Janeiro", CityId = 3 };
         var response = await _clientTest.PostAsync(url, new StringContent(city, System.Text.Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
@@ -94,9 +92,8 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Trait("Rotas", "Hotel")]
-    [Theory(DisplayName = "Testa se a rota GET de Hotel traz todos os hotéis:")]
+    [Theory(DisplayName = "3 - Testa se a rota GET de Hotel traz todos os hotéis:")]
     [InlineData("/hotel")]
-
     public async Task TestGetAllHotels(string url)
     {
         List<HotelDto> allHotels = new() { new HotelDto { HotelId = 1, Name = "Trybe Hotel Manaus", Address = "Address 1", CityId = 1, CityName = "Manaus" }, new HotelDto { HotelId = 2, Name = "Trybe Hotel Palmas", Address = "Address 2", CityId = 2, CityName = "Palmas" }, new HotelDto { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Address 3", CityId = 1, CityName = "Manaus" } };
@@ -106,7 +103,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         response.Content.Equals(allHotels);
     }
 
-    [Theory(DisplayName = "Testa se a rota POST de hotel cria um hotel:")]
+    [Theory(DisplayName = "4 - Testa se a rota POST de hotel cria um hotel:")]
     [InlineData("/hotel", "{ \"name\": \"Hotel Golden River\", \"address\": \"Av. Bernardo Vieira de Mello, 1204\", \"cityId\": \"1\"}")]
     public async Task TestCreateHotel(string url, string hotel)
     {
@@ -118,7 +115,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Trait("Rotas", "Room")]
-    [Theory(DisplayName = "Testa se a rota DELETE de Room deleta um quarto")]
+    [Theory(DisplayName = "5 - Testa se a rota DELETE de Room deleta um quarto")]
     [InlineData("/room/1")]
     public async Task TestRemoveRoom(string url)
     {
@@ -128,7 +125,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         response.Content.Equals(null);
     }
 
-    [Theory(DisplayName = "Testa se a rota POST de hotel cria um hotel:")]
+    [Theory(DisplayName = "6 - Testa se a rota POST de Room cria um quarto:")]
     [InlineData("/room", "{\"name\": \"Suite básica\", \"capacity\": \"2\", \"image\": \"image suite\", \"hotelId\": \"1\"}")]
     public async Task TestCreateHotelRoom(string url, string hotel)
     {
@@ -139,7 +136,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         response.Content.Equals(createdRoom);
     }
 
-    [Theory(DisplayName = "Testa se a rota GET de Room traz os quartos daquele hotel")]
+    [Theory(DisplayName = "7 - Testa se a rota GET de Room traz os quartos daquele hotel")]
     [InlineData("/room/1")]
     public async Task TestGetRooms(string url)
     {
