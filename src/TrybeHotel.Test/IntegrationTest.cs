@@ -70,51 +70,58 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         }).CreateClient();
     }
 
-    [Trait("Rotas", "City")]
+    [Trait("Category", "City")]
     [Theory(DisplayName = "1 - Testa se a rota GET de City traz todas as cidades:")]
-    [InlineData("/city")]
-    public async Task TestGetAllCities(string url)
+    [InlineData("/city", "[{\"cityId\":1,\"name\":\"Manaus\"},{\"cityId\":2,\"name\":\"Palmas\"}]")]
+    public async Task TestGetAllCities(string url, string expectedResult)
     {
         var response = await _clientTest.GetAsync(url);
         response.EnsureSuccessStatusCode();
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
-        response.Content.ReadAsStringAsync().Result.Should().BeEquivalentTo("[{\"cityId\":1,\"name\":\"Manaus\"},{\"cityId\":2,\"name\":\"Palmas\"}]");
+        Assert.Equal(expectedResult, response.Content.ReadAsStringAsync().Result);
     }
 
+    [Trait("Category", "City")]
     [Theory(DisplayName = "2 - Testa se a rota POST de City cria uma cidade:")]
-    [InlineData("/city", "{\"name\":\"Rio de Janeiro\"}")]
-    public async Task TestCreateCity(string url, string city)
+    [InlineData("/city", "{\"name\":\"Rio de Janeiro\"}", "{\"cityId\":3,\"name\":\"Rio de Janeiro\"}")]
+    public async Task TestCreateCity(string url, string cityToCreate, string expectedCreatedCityResult)
     {
-        var response = await _clientTest.PostAsync(url, new StringContent(city, System.Text.Encoding.UTF8, "application/json"));
+        var response = await _clientTest.PostAsync(url, new StringContent(cityToCreate, System.Text.Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
-        response.Content.ReadAsStringAsync().Result.Should().BeEquivalentTo("{\"cityId\":3,\"name\":\"Rio de Janeiro\"}");
+        string cityResponse = await response.Content.ReadAsStringAsync();
+        City cityResponseDeserialized = JsonConvert.DeserializeObject<City>(cityResponse);
+        // Assert.Equal(3, cityResponseDeserialized.CityId);
+        Assert.Equal("Rio de Janeiro", cityResponseDeserialized.Name);
+        Assert.Equal(3, cityResponseDeserialized.CityId);
+        Assert.Equal(expectedCreatedCityResult, response.Content.ReadAsStringAsync().Result);
     }
 
-    [Trait("Rotas", "Hotel")]
+    [Trait("Category", "Hotel")]
     [Theory(DisplayName = "3 - Testa se a rota GET de Hotel traz todos os hotéis:")]
     [InlineData("/hotel")]
     public async Task TestGetAllHotels(string url)
     {
         List<HotelDto> allHotels = new() { new HotelDto { HotelId = 1, Name = "Trybe Hotel Manaus", Address = "Address 1", CityId = 1, CityName = "Manaus" }, new HotelDto { HotelId = 2, Name = "Trybe Hotel Palmas", Address = "Address 2", CityId = 2, CityName = "Palmas" }, new HotelDto { HotelId = 3, Name = "Trybe Hotel Ponta Negra", Address = "Address 3", CityId = 1, CityName = "Manaus" } };
         var response = await _clientTest.GetAsync(url);
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
-        response.Content.Equals(allHotels);
+        response?.EnsureSuccessStatusCode();
+        Assert.Equal(System.Net.HttpStatusCode.OK, response?.StatusCode);
+        // Assert.Equal(allHotels, response.Content.ReadAsStringAsync().Result);
+        response?.Content.Equals(allHotels);
     }
 
+    [Trait("Category", "Hotel")]
     [Theory(DisplayName = "4 - Testa se a rota POST de hotel cria um hotel:")]
     [InlineData("/hotel", "{ \"name\": \"Hotel Golden River\", \"address\": \"Av. Bernardo Vieira de Mello, 1204\", \"cityId\": \"1\"}")]
     public async Task TestCreateHotel(string url, string hotel)
     {
         HotelDto createdHotel = new() { Name = "Hotel Golden River", Address = "Av. Bernardo Vieira de Mello, 1204", CityId = 1, CityName = "Manaus" };
         var response = await _clientTest.PostAsync(url, new StringContent(hotel, System.Text.Encoding.UTF8, "application/json"));
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
-        response.Content.Equals(createdHotel);
+        response?.EnsureSuccessStatusCode();
+        Assert.Equal(System.Net.HttpStatusCode.Created, response?.StatusCode);
     }
 
-    [Trait("Rotas", "Room")]
+    [Trait("Category", "Room")]
     [Theory(DisplayName = "5 - Testa se a rota DELETE de Room deleta um quarto")]
     [InlineData("/room/1")]
     public async Task TestRemoveRoom(string url)
@@ -122,9 +129,9 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _clientTest.DeleteAsync(url);
         response.EnsureSuccessStatusCode();
         Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
-        response.Content.Equals(null);
     }
 
+    [Trait("Category", "Room")]
     [Theory(DisplayName = "6 - Testa se a rota POST de Room cria um quarto:")]
     [InlineData("/room", "{\"name\": \"Suite básica\", \"capacity\": \"2\", \"image\": \"image suite\", \"hotelId\": \"1\"}")]
     public async Task TestCreateHotelRoom(string url, string hotel)
@@ -136,6 +143,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         response.Content.Equals(createdRoom);
     }
 
+    [Trait("Category", "Room")]
     [Theory(DisplayName = "7 - Testa se a rota GET de Room traz os quartos daquele hotel")]
     [InlineData("/room/1")]
     public async Task TestGetRooms(string url)
